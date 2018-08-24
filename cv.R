@@ -1,7 +1,7 @@
 require(glmnet)
 require(Hmisc)
 
-#model complexity & prediction error
+#model complexity
 set.seed(9001)
 n = 100
 p = 50
@@ -18,14 +18,14 @@ MSEtr = apply((Yhtr - Ytr %*% matrix(1, 1, length(fit$lambda))) ^ 2, 2, mean)
 Yhts = predict(fit, newx = Xts)
 MSEts = apply((Yhts - Yts %*% matrix(1, 1, length(fit$lambda))) ^ 2, 2, mean)
 
-plot(1: length(fit$lambda), MSEtr, type = "l", col = 4, xlab = "Sparsity", ylab = "Error")
+plot(1: length(fit$lambda), MSEtr, type = "l", col = 4, xlab = "sparsity", ylab = "error")
 lines(1: length(fit$lambda), MSEtr, col = 4)
 lines(1: length(fit$lambda), MSEts, col = 2)
-legend(30, 10, legend = c("Training Error", "Test Error"), col = c(4, 2), lty = c(1, 1), cex = .75)
+legend(30, 10, legend = c("training error", "test error"), col = c(4, 2), lty = c(1, 1), cex = .75)
 
 t(t(fit$beta[, 15]))
 
-#cross-validation
+#cv
 fold = 5
 sam = sample(1: n, n)
 CVerrs = NULL
