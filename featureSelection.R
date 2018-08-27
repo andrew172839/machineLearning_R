@@ -5,17 +5,17 @@ library(glmnet)
 train = read.csv("train.csv")
 train = train[, 1: 41]
 
-#feature selection in linear models
-#best subsets selection
-fitbsub = regsubsets(x = train[, 2: 41], y = train[, 1])
-summary(fitbsub)
+# feature selection in linear models
+# best subset selection
+fit_bestSubset = regsubsets(x = train[, 2: 41], y = train[, 1])
+summary(fit_bestSubset)
 
-#backwards step-wise - via bic
+# backwards step-wise, via bic
 fit = lm(data = train)
-fitb = stepAIC(fit, direction = "backward", data = train, k = log(nrow(train)))
-summary(fitb)
+fit_backwards = stepAIC(fit, direction = "backward", data = train, k = log(nrow(train)))
+summary(fit_backwards)
 
-#l1 regularization
+# l1 regularization
 Y = as.numeric(train[, 1]);
 Y = Y - mean(Y)
 X = as.matrix(train[, -1]);
@@ -26,7 +26,7 @@ lam = 1
 fitl = glmnet(x = X, y = Y, family = "gaussian", lambda = lam, alpha = 1)
 cbind(fit0$coef, as.matrix(fitl$beta))
 
-#lasso paths
+# lasso paths
 fitl = glmnet(x = X, y = Y, family = "gaussian", alpha = 1)
 plot(fitl, col = 1: 40)
 legend(0, 4, legend = names(train)[2: 41], col = 1: 41, lty = rep(1, 41), cex = .41)
